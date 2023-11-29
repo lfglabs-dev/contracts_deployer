@@ -12,16 +12,16 @@ logging.basicConfig()
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
 
-with open('config.toml', 'r') as config_file:
+with open("config.toml", "r") as config_file:
     config = toml.load(config_file)
 
 # Accessing variables
-ADDRESS = config.get('ADDRESS')
-PRIV_KEY = config.get('PRIV_KEY')
-NODE_URL = config.get('NODE_URL')
+ADDRESS = config.get("ADDRESS")
+PRIV_KEY = config.get("PRIV_KEY")
+NODE_URL = config.get("NODE_URL")
+
 
 async def main():
-
     key_pair = KeyPair.from_private_key(PRIV_KEY)
 
     account = Account(
