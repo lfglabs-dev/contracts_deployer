@@ -27,12 +27,12 @@ async def main():
     account = Account(
         address=ADDRESS,
         client=FullNodeClient(node_url=NODE_URL),
-        chain=StarknetChainId.TESTNET,
+        chain=StarknetChainId.MAINNET,
         key_pair=key_pair,
     )
     logger.info("ℹ️  Using account %s as deployer", hex(account.address))
 
-    contract_file = Path("contracts/naming.json").read_text()
+    contract_file = Path("contracts/main.json").read_text()
     declare_v1_tx = await account.sign_declare_transaction(
         compiled_contract=contract_file,
         max_fee=int(1e17),

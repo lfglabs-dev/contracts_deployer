@@ -22,18 +22,19 @@ with open("config.toml", "r") as config_file:
 ADDRESS = config.get("ADDRESS")
 PRIV_KEY = config.get("PRIV_KEY")
 NODE_URL = config.get("NODE_URL")
-NAME = "identity_Identity"
-CASM_FILE = "contracts/identity_Identity.compiled_contract_class.json"
-SIERRA_FILE = "contracts/identity_Identity.contract_class.json"
+NAME = "kuracoin_Kuracoin"
+CASM_FILE = f"contracts/{NAME}.compiled_contract_class.json"
+SIERRA_FILE = f"contracts/{NAME}.contract_class.json"
 
 
 async def main():
+
     key_pair = KeyPair.from_private_key(PRIV_KEY)
     client = FullNodeClient(node_url=NODE_URL)
     account = Account(
         address=ADDRESS,
         client=client,
-        chain=StarknetChainId.TESTNET,
+        chain=StarknetChainId.MAINNET,
         key_pair=key_pair,
     )
     logger.info("ℹ️  Using account %s as deployer", hex(account.address))
@@ -53,13 +54,13 @@ async def main():
     except Exception:
         pass
 
-    declare_v2_tx = await account.sign_declare_v2_transaction(
+    declare_v3_tx = await account.sign_declare_v3(
         compiled_contract=contract_compiled_sierra,
         compiled_class_hash=casm_class_hash,
-        max_fee=int(1e17),
+        auto_estimate=True,
     )
 
-    resp = await account.client.declare(transaction=declare_v2_tx)
+    resp = await account.client.declare(transaction=declare_v3_tx)
     logger.info(f"ℹ️ tx hash: {hex(resp.transaction_hash)}")
     await account.client.wait_for_tx(resp.transaction_hash)
 
