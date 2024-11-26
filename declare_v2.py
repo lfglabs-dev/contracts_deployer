@@ -67,10 +67,11 @@ async def main():
     except Exception:
         pass
 
-    declare_v3_tx = await account.sign_declare_v3(
+    declare_v3_tx = await account.sign_declare_v2(
         compiled_contract=contract_compiled_sierra,
         compiled_class_hash=casm_class_hash,
-        auto_estimate=True,
+        auto_estimate=False,
+        max_fee=8794884308816881,
     )
 
     resp = await account.client.declare(transaction=declare_v3_tx)
